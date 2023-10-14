@@ -4,6 +4,15 @@ namespace ConsoleApps
 {
     internal class Program
     {
+        public void Randomizer()
+        {
+            Random rand = new Random();
+            int i = rand.Next(int.Parse(Console.ReadLine()));
+            Console.WriteLine(i);
+            bool check = i < 3;
+            Console.WriteLine(check ? "меньше 3" : "fC"); // Тернарный оператор: bool ? true : falce
+        }
+
         static void Main(string[] args)
         {
             string fullName = "Иванов Иван Иванович";
@@ -17,6 +26,7 @@ namespace ConsoleApps
             //Задание 1. Вариант №1
             Console.WriteLine($"Full name: {fullName} \nAge: {age} \nEmail: {email} \nProgramming scores: {programScores} \nMath scores: {mathScores} \nPhysicScores {physicScores}");
             Console.WriteLine("Approximate: " + approxScores.ToString("#.#") + "\n");
+            Console.WriteLine();
             Console.ReadKey();
 
             //Задание 1. Вариант №2

@@ -1,0 +1,7 @@
+*.pdb
+*.exe
+*.vsidx
+*.sln
+*.config
+*.cache
+*.txt
