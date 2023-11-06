@@ -1,7 +1,0 @@
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\bin\Debug\ConsoleApps.exe.config
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\bin\Debug\ConsoleApps.exe
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\bin\Debug\ConsoleApps.pdb
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\obj\Debug\ConsoleApps.csproj.AssemblyReference.cache
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\obj\Debug\ConsoleApps.csproj.CoreCompileInputs.cache
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\obj\Debug\ConsoleApps.exe
-C:\Users\mihar\Documents\Data\GitHub\MyLearning\ConsoleApps\obj\Debug\ConsoleApps.pdb

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{823C6560-A340-4EEA-A43A-4092151926BD}</ProjectGuid>
+    <ProjectGuid>{8AD72F8A-803A-425E-9DC3-C1AC0CBB7D88}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApps</RootNamespace>
-    <AssemblyName>ConsoleApps</AssemblyName>
+    <RootNamespace>Mod5_Functions</RootNamespace>
+    <AssemblyName>Mod5_Functions</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-[assembly: AssemblyTitle("Mod3_3")]
+[assembly: AssemblyTitle("Mod5_Functions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Mod3_3")]
+[assembly: AssemblyProduct("Mod5_Functions")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-[assembly: Guid("d9f59662-de18-4c7c-a308-492b0aae5efd")]
+[assembly: Guid("8ad72f8a-803a-425e-9dc3-c1ac0cbb7d88")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //
