@@ -91,7 +91,7 @@ namespace Mod6_Company
         {
             Console.WriteLine("Добро пожаловать в справочник сотрудников!");
             CompanyNaming();
-            char key = 'a';
+            char key;
             Console.Write("Добавить запись (a) или считать записи? (r) >>: "); key = Console.ReadKey(true).KeyChar;
 
             while (char.ToLower(key) == 'a' || char.ToLower(key) == 'r')
