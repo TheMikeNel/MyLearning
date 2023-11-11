@@ -25,17 +25,28 @@ namespace Mod6_Company
         }
 
         static string employeeFile = "Employees.csv";
-        static int employeeCount = 0;
+        static int employeeID = 0;
         static void WriteEmployees()
         {
+            if (employeeID == 0) // Если программа открывается в первый раз и еще не добавлено ни одного сотрудника, выполняется поиск ID последнего сотрудника
+            {
+                string[] s;
+
+                if (File.Exists(employeeFile) && (s = File.ReadAllLines(employeeFile)).Length > 0) // Если программа уже создавала когда-либо файл и добавлялись сотрудники
+                {
+                    if (int.TryParse(s.Last().Split('#')[0], out employeeID)) employeeID++; // Если на последней строке файла корректно введены данные сотрудника, ID следующего сотрудника равен ID последнего добавленного + 1.
+                    else employeeID = 1; // Иначе ID следующего сотрудника = 1
+                }
+                else employeeID = 1; // Иначе, если файла учета сотрудников не существует или сотрудники в него не добавлялись, ID следующего сотрудника = 1
+            }
+            else employeeID++; // Иначе, если с программой работают в данный момент, то при добавлении нового сотрудника, его ID просто увеличивается на 1 после предыдущего.
+
             using (StreamWriter sw = new StreamWriter(employeeFile, true, Encoding.Unicode))
             {
                 string line = string.Empty;
-
-                ++employeeCount;
-
-                Console.WriteLine("\nID: " + employeeCount);
-                line += employeeCount + "#\t";
+                
+                Console.WriteLine("\n\nID: " + employeeID);
+                line += employeeID + "#\t";
 
                 Console.WriteLine($"\nВремя добавления записи: {DateTime.Now}");
                 line += DateTime.Now.ToString() + "#\t";
@@ -46,9 +57,9 @@ namespace Mod6_Company
 
                 Console.Write("\nРост: "); line += Console.ReadLine() + "#\t";
 
-                Console.Write("\nДата рождения >> Число: "); int day = int.Parse(Console.ReadLine());
-                Console.Write("\nДата рождения >> Месяц: "); int month = int.Parse(Console.ReadLine());
                 Console.Write("\nДата рождения >> Год: "); int year = int.Parse(Console.ReadLine());
+                Console.Write("\nДата рождения >> Месяц: "); int month = int.Parse(Console.ReadLine());
+                Console.Write("\nДата рождения >> День: "); int day = int.Parse(Console.ReadLine());
                 DateTime dateTime = new DateTime(year, month, day);
                 line += dateTime.ToShortDateString() + "#\t";
 
@@ -104,7 +115,6 @@ namespace Mod6_Company
                 {
                     ReadEmployees();
                 }
-
                 Console.Write("\nДобавить запись (a) или считать записи? (r) >>: "); key = Console.ReadKey(true).KeyChar;
             }
         }
