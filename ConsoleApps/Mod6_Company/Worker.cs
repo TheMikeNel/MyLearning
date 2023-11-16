@@ -18,7 +18,8 @@ namespace Mod6_Company
 
         public string PlaceOfBirth { get; set; }
 
-        public Worker (string fio, byte age, byte height, DateTime dateOfBirth, string placeOfBirth)
+        public Worker (string fio, byte age, byte height, DateTime dateOfBirth, string placeOfBirth) // ID и время добавления работника (DateOfAdd) задаются отдельно
+                                                                                                     // для каждого экземпляра работника после создания основного конструктора.
         {
             ID = 0;
             DateOfAdd = DateTime.Now;
