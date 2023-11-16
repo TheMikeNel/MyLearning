@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mod6_Company
 {
     internal class Program
     {
         static string nameFile = "Company.txt";
+
+        /// <summary>
+        /// Создание имени компании, если оно не было задано ранее
+        /// </summary>
         static void CompanyNaming()
         {
             if (File.Exists(nameFile))
@@ -24,99 +24,146 @@ namespace Mod6_Company
             }
         }
 
-        static string employeeFile = "Employees.csv";
-        static int employeeID = 0;
-        static void WriteEmployees()
+        /// <summary>
+        /// Отображение с настроенным форматированием заданных работников в консоли 
+        /// </summary>
+        /// <param name="workers"></param>
+        static void DisplayWorkerParamsToLine(Worker[] workers)
         {
-            if (employeeID == 0) // Если программа открывается в первый раз и еще не добавлено ни одного сотрудника, выполняется поиск ID последнего сотрудника
+            if (workers != null)
             {
-                string[] s;
+                Console.WriteLine("\nID \t Время создания \t\t ФИО \t Возраст  Рост \t Дата рождения \t Место рождения\n");
 
-                if (File.Exists(employeeFile) && (s = File.ReadAllLines(employeeFile)).Length > 0) // Если программа уже создавала когда-либо файл и добавлялись сотрудники
+                foreach (Worker worker in workers)
                 {
-                    if (int.TryParse(s.Last().Split('#')[0], out employeeID)) employeeID++; // Если на последней строке файла корректно введены данные сотрудника, ID следующего сотрудника равен ID последнего добавленного + 1.
-                    else employeeID = 1; // Иначе ID следующего сотрудника = 1
+                    string[] line = worker.GetWorkerParamsAsString().Split('#');
+
+                    Console.WriteLine($"{line[0]} \t{line[1]}\t{line[2],10} {line[3],5} {line[4],5}  \t{line[5]} {line[6],10}\n");
                 }
-                else employeeID = 1; // Иначе, если файла учета сотрудников не существует или сотрудники в него не добавлялись, ID следующего сотрудника = 1
             }
-            else employeeID++; // Иначе, если с программой работают в данный момент, то при добавлении нового сотрудника, его ID просто увеличивается на 1 после предыдущего.
-
-            using (StreamWriter sw = new StreamWriter(employeeFile, true, Encoding.Unicode))
-            {
-                string line = string.Empty;
-                
-                Console.WriteLine("\n\nID: " + employeeID);
-                line += employeeID + "#\t";
-
-                Console.WriteLine($"\nВремя добавления записи: {DateTime.Now}");
-                line += DateTime.Now.ToString() + "#\t";
-
-                Console.Write("\nВведите Ф И О сотрудника: "); line += Console.ReadLine() + "#\t";
-
-                Console.Write("\nВозраст: "); line += Console.ReadLine() + "#\t";
-
-                Console.Write("\nРост: "); line += Console.ReadLine() + "#\t";
-
-                Console.Write("\nДата рождения >> Год: "); int year = int.Parse(Console.ReadLine());
-                Console.Write("\nДата рождения >> Месяц: "); int month = int.Parse(Console.ReadLine());
-                Console.Write("\nДата рождения >> День: "); int day = int.Parse(Console.ReadLine());
-                DateTime dateTime = new DateTime(year, month, day);
-                line += dateTime.ToShortDateString() + "#\t";
-
-                Console.Write("\nМесто рождения: "); line += Console.ReadLine();
-
-                sw.WriteLine(line);
-
-                Console.WriteLine("\nЗапись добавлена <<");
-            }
-
         }
 
-        static void ReadEmployees()
+        /// <summary>
+        /// Запись нового работника
+        /// </summary>
+        static void WriteWorker()
         {
-            if (File.Exists(employeeFile))
+            string line = string.Empty;
+            int employeeID = Repository.GetNextID();
+
+            Console.WriteLine("\n\nID: " + employeeID); line += employeeID + "#";
+
+            Console.WriteLine($"\nВремя добавления записи: {DateTime.Now}"); line += DateTime.Now.ToString() + "#";
+
+            Console.Write("\nВведите Ф И О сотрудника: "); line += Console.ReadLine() + "#";
+
+            Console.Write("\nВозраст: "); line += Console.ReadLine() + "#";
+
+            Console.Write("\nРост: "); line += Console.ReadLine() + "#";
+
+            Console.Write("\nДата рождения >> Год: "); int year = int.Parse(Console.ReadLine());
+            Console.Write("\nДата рождения >> Месяц: "); int month = int.Parse(Console.ReadLine());
+            Console.Write("\nДата рождения >> День: "); int day = int.Parse(Console.ReadLine());
+            DateTime dateTime = new DateTime(year, month, day);
+            line += dateTime.ToShortDateString() + "#";
+
+            Console.Write("\nМесто рождения: "); line += Console.ReadLine();
+
+            Worker w = new Worker();
+            w.SetWorkerByLine(line);
+            Repository.AddWorker(w);
+        }
+
+        static void DeleteWorkerByID(int id)
+        {
+            Repository.DeleteWorker(id);
+        }
+
+        /// <summary>
+        /// Чтение всех работников
+        /// </summary>
+        static void ReadAllWorkers()
+        {
+            Worker[] workers = Repository.GetAllWorkers();
+            DisplayWorkerParamsToLine(workers);
+        }
+
+        /// <summary>
+        /// Чтение работника с соответствующим ID
+        /// </summary>
+        /// <param name="id"></param>
+        static void ReadWorkerByID(int id)
+        {
+            Worker w = Repository.GetWorkerByID(id);
+
+            if (w.ID != 0)
             {
-                Console.WriteLine("\n");
+                Worker[] wArr = new Worker[1]; // Создание массива из одного работника для форматированного отображения одного работника в консоли
+                                               // (в метод вывода DisplayWorkerParamsToLine(), в качестве работников передается только массив)
+                wArr[0] = w;
 
-                using (StreamReader sr = new StreamReader(employeeFile))
-                {
-                    string line;
-
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        string[] empData = line.Split('\t');
-                        line = string.Empty;
-
-                        foreach (string emp in empData)
-                        {
-                            line += emp + " ";
-                        }
-                        Console.WriteLine(line);
-                    }
-                }
+                DisplayWorkerParamsToLine(wArr);
             }
-            else Console.WriteLine("\nФайл не создан. Добавьте хотя бы одну запись!");
+        }
+
+        /// <summary>
+        /// Получение работников с соответствующим временем записи в файл диапазону между min и max DateTime
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        static void ReadWorkersBetweenTwoDates(DateTime min, DateTime max)
+        {
+            Worker[] w = Repository.GetWorkersBetweenTwoDates(min, max);
+            DisplayWorkerParamsToLine(w);
         }
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Добро пожаловать в справочник сотрудников!");
+            // Строка-подсказка с наименованием функциональных клавиш
+            string functionsDescription =
+            "\nДобавить работника (a)\n" +
+            "Удалить работника с заданным ID (d)\n" +
+            "Получить всех работников (g)\n" +
+            "Получить работника с заданным ID (i)\n" +
+            "Получить всех работников, добавленных между двумя датами (t)\n>>: ";
+
+            Console.WriteLine("Добро пожаловать в справочник работников!");
             CompanyNaming();
             char key;
-            Console.Write("Добавить запись (a) или считать записи? (r) >>: "); key = Console.ReadKey(true).KeyChar;
 
-            while (char.ToLower(key) == 'a' || char.ToLower(key) == 'r')
+            Console.Write("\n" + functionsDescription); key = char.ToLower(Console.ReadKey().KeyChar);
+
+            while (key == 'a' || key == 'd' || key == 'g' || key == 'i' || key == 't')
             {
-                if (char.ToLower(key) == 'a')
+                switch (char.ToLower(key))
                 {
-                    WriteEmployees();
+                    case 'a':
+                        WriteWorker();
+                        Console.WriteLine("\nРаботник добавлен");
+                        break;
+                    case 'g':
+                        ReadAllWorkers();
+                        break;
+                    case 'i':
+                        Console.Write("\nВведите ID искомого работника: "); 
+                        ReadWorkerByID(int.Parse(Console.ReadLine()));
+                        break;
+                    case 'd':
+                        Console.Write("\nВведите ID удаляемого работника: ");
+                        DeleteWorkerByID(int.Parse(Console.ReadLine()));
+                        break;
+                    case 't':
+                        DateTime minDate = DateTime.Now.AddDays(-10);
+                        DateTime maxDate = DateTime.Now.AddDays(1);
+                        Console.WriteLine($"\nПолучение работников, добавленных в промежутке между {minDate} и {maxDate} числами");
+                        ReadWorkersBetweenTwoDates(minDate, maxDate);
+                        break;
                 }
-                else if (char.ToLower(key) == 'r')
-                {
-                    ReadEmployees();
-                }
-                Console.Write("\nДобавить запись (a) или считать записи? (r) >>: "); key = Console.ReadKey(true).KeyChar;
-            }
+                Console.Write("\n" + functionsDescription); key = char.ToLower(Console.ReadKey().KeyChar);
+            } 
+
+
+            Console.ReadKey();
         }
     }
 }
