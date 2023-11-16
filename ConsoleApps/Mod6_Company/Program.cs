@@ -8,7 +8,7 @@ namespace Mod6_Company
         static string nameFile = "Company.txt";
 
         /// <summary>
-        /// Создание имени компании, если оно не было задано ранее
+        /// Создание имени компании / отображение ранее заданного имени
         /// </summary>
         static void CompanyNaming()
         {
@@ -25,10 +25,10 @@ namespace Mod6_Company
         }
 
         /// <summary>
-        /// Отображение с настроенным форматированием заданных работников в консоли 
+        /// Отображение передаваемых в виде массива работников в консоли с настроенным форматированием
         /// </summary>
         /// <param name="workers"></param>
-        static void DisplayWorkerParamsToLine(Worker[] workers)
+        static void DisplayWorkerParamsInConsole(Worker[] workers)
         {
             if (workers != null)
             {
@@ -74,22 +74,8 @@ namespace Mod6_Company
             Repository.AddWorker(w);
         }
 
-        static void DeleteWorkerByID(int id)
-        {
-            Repository.DeleteWorker(id);
-        }
-
         /// <summary>
-        /// Чтение всех работников
-        /// </summary>
-        static void ReadAllWorkers()
-        {
-            Worker[] workers = Repository.GetAllWorkers();
-            DisplayWorkerParamsToLine(workers);
-        }
-
-        /// <summary>
-        /// Чтение работника с соответствующим ID
+        /// Отобразить работника с требуемым ID
         /// </summary>
         /// <param name="id"></param>
         static void ReadWorkerByID(int id)
@@ -102,7 +88,7 @@ namespace Mod6_Company
                                                // (в метод вывода DisplayWorkerParamsToLine(), в качестве работников передается только массив)
                 wArr[0] = w;
 
-                DisplayWorkerParamsToLine(wArr);
+                DisplayWorkerParamsInConsole(wArr);
             }
         }
 
@@ -111,11 +97,6 @@ namespace Mod6_Company
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
-        static void ReadWorkersBetweenTwoDates(DateTime min, DateTime max)
-        {
-            Worker[] w = Repository.GetWorkersBetweenTwoDates(min, max);
-            DisplayWorkerParamsToLine(w);
-        }
 
         static void Main(string[] args)
         {
@@ -125,7 +106,9 @@ namespace Mod6_Company
             "Удалить работника с заданным ID (d)\n" +
             "Получить всех работников (g)\n" +
             "Получить работника с заданным ID (i)\n" +
-            "Получить всех работников, добавленных между двумя датами (t)\n>>: ";
+            "Получить всех работников, добавленных между двумя датами (t)\n" +
+            "Сортировка работников по возрасту (v)\n" +
+            "Сортировка работников по высоте (h)\n>>: ";
 
             Console.WriteLine("Добро пожаловать в справочник работников!");
             CompanyNaming();
@@ -133,7 +116,7 @@ namespace Mod6_Company
 
             Console.Write("\n" + functionsDescription); key = char.ToLower(Console.ReadKey().KeyChar);
 
-            while (key == 'a' || key == 'd' || key == 'g' || key == 'i' || key == 't')
+            while (key == 'a' || key == 'd' || key == 'g' || key == 'i' || key == 't' || key == 'v' || key == 'h')
             {
                 switch (char.ToLower(key))
                 {
@@ -142,7 +125,7 @@ namespace Mod6_Company
                         Console.WriteLine("\nРаботник добавлен");
                         break;
                     case 'g':
-                        ReadAllWorkers();
+                        DisplayWorkerParamsInConsole(Repository.GetAllWorkers());
                         break;
                     case 'i':
                         Console.Write("\nВведите ID искомого работника: "); 
@@ -150,18 +133,23 @@ namespace Mod6_Company
                         break;
                     case 'd':
                         Console.Write("\nВведите ID удаляемого работника: ");
-                        DeleteWorkerByID(int.Parse(Console.ReadLine()));
+                        Repository.DeleteWorker(int.Parse(Console.ReadLine()));
                         break;
                     case 't':
                         DateTime minDate = DateTime.Now.AddDays(-10);
                         DateTime maxDate = DateTime.Now.AddDays(1);
                         Console.WriteLine($"\nПолучение работников, добавленных в промежутке между {minDate} и {maxDate} числами");
-                        ReadWorkersBetweenTwoDates(minDate, maxDate);
+                        DisplayWorkerParamsInConsole(Repository.GetWorkersBetweenTwoDates(minDate, maxDate));
+                        break;
+                    case 'v':
+                        DisplayWorkerParamsInConsole(Repository.GetWorkersSortByAge());
+                        break;
+                    case 'h':
+                        DisplayWorkerParamsInConsole(Repository.GetWorkersSortByHeight());
                         break;
                 }
                 Console.Write("\n" + functionsDescription); key = char.ToLower(Console.ReadKey().KeyChar);
             } 
-
 
             Console.ReadKey();
         }

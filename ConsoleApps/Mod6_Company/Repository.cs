@@ -173,5 +173,55 @@ namespace Mod6_Company
                 else Console.WriteLine($"Работник с ID: {workerID} не найден!"); // Иначе, работника с таким ID не найдено
             }
         }
+
+        #region Sorting
+
+        /// <summary>
+        /// Получить массив работников, отсортированных по возрасту
+        /// </summary>
+        /// <returns></returns>
+        public static Worker[] GetWorkersSortByAge()
+        {
+            Worker[] w = GetAllWorkers();
+
+            for (int i = 0; i < w.Length - 1; i++)
+            {
+                for (int j = i + 1; j < w.Length; j++)
+                {
+                    if (w[i].Age < w[j].Age)
+                    {
+                        Worker t = w[j];
+                        w[j] = w[i];
+                        w[i] = t;
+                    }
+                }
+            }
+
+            return w;
+        }
+
+        /// <summary>
+        /// Получить массив работников, отсортированных по высоте
+        /// </summary>
+        /// <returns></returns>
+        public static Worker[] GetWorkersSortByHeight()
+        {
+            Worker[] w = GetAllWorkers();
+            
+            for (int i = 0; i < w.Length - 1; i++)
+            {
+                for (int j = i + 1; j < w.Length; j++)
+                {
+                    if (w[i].Height < w[j].Height)
+                    {
+                        Worker t = w[j];
+                        w[j] = w[i];
+                        w[i] = t;
+                    }
+                }
+            }
+            return w;
+        }
+        #endregion
     }
 }
