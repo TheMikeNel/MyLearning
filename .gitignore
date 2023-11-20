@@ -4,10 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # My files
-Old/*
-Old/
-Trainings/*
-Trainings/
+.Old/
+.Trainings/
 
 # User-specific files
 *.rsuser
