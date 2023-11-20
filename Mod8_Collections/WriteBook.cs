@@ -42,32 +42,29 @@ namespace Mod8_Collections
 
         static void SerializeNotes(List<Note> notes)
         {
-            XElement person = new XElement("PERSON");
-            XElement address = new XElement("ADDRESS");
-           
-            XElement phones = new XElement("PHONES");
-
-            XAttribute fio = new XAttribute("FIO", "");
-
-            XAttribute street = new XAttribute("Street", "");
-            XAttribute houseNum = new XAttribute("HouseNumber", "");
-            XAttribute flatNum = new XAttribute("FlatNumber", "");
-
-            XAttribute mobilePhone = new XAttribute("MobilePhone", "");
-            XAttribute homePhone = new XAttribute("HomePhone", "");
-
             foreach (Note note in notes)
             {
-                person.Add(fio.Value = note.FIO);
+                XElement person = new XElement("PERSON");
+                XElement address = new XElement("ADDRESS");
+                XElement phones = new XElement("PHONES");
 
-                address.Add(street.Value = note.Street);
-                address.Add(houseNum.Value = note.HouseNumber);
-                address.Add(flatNum.Value = note.FlatNumber);
+                XAttribute fio = new XAttribute("FIO", note.FIO);
+                XAttribute street = new XAttribute("Street", note.Street);
+                XAttribute houseNum = new XAttribute("HouseNumber", note.HouseNumber);
+                XAttribute flatNum = new XAttribute("FlatNumber", note.FlatNumber);
+                XAttribute mobilePhone = new XAttribute("MobilePhone", note.MobilePhone);
+                XAttribute homePhone = new XAttribute("HomePhone", note.HomePhone);
+
+                person.Add(fio);
+
+                address.Add(street);
+                address.Add(houseNum);
+                address.Add(flatNum);
 
                 person.Add(address);
 
-                phones.Add(mobilePhone.Value = note.MobilePhone);
-                phones.Add(homePhone.Value = note.HomePhone);
+                phones.Add(mobilePhone);
+                phones.Add(homePhone);
 
                 person.Add(phones);
 

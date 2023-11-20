@@ -42,7 +42,7 @@ namespace Mod8_Collections
                 key = char.ToLower(Console.ReadKey().KeyChar);
             }
 
-            Console.WriteLine("\n>>> Работа с книгой номеров завершена <<<\n");
+            Console.WriteLine("\n>>> Работа с книгой номеров завершена <<<");
         }
 
         static void AddNewContact(string number, string name)
