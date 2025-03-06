@@ -13,14 +13,39 @@
 
             lock (sync)
             {
-                for (int i = 0; i < 15; i++)
+                if (o is CancellationToken cancellationToken)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Event: {o}");
-                    Thread.Sleep(150);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Console.WriteLine("Cancellable thread work iteration: " + i);
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            Console.WriteLine("Thread cancelled");
+                            Console.WriteLine($"Thread ends: {th.Name}. Hash = {th.GetHashCode()}, ID: {th.ManagedThreadId}");
+                            break;
+                        }
+                        Thread.Sleep(150);
+                    }
                 }
+                else
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Event: {o}");
+                        Thread.Sleep(150);
+                    }
+                }
+
                 Console.WriteLine($"Thread ends: {th.Name}. Hash = {th.GetHashCode()}, ID: {th.ManagedThreadId}");
             }
+        }
+
+        private static void ThreadReadKey(CancellationTokenSource cancel)
+        {
+            char c = Console.ReadKey().KeyChar;
+            Console.WriteLine("Entered char: " + c);
+            cancel.Cancel();
         }
 
         static void Main(string[] args)
@@ -30,20 +55,27 @@
             Console.WriteLine($"TEntery point: {th.Name}. Hash = {th.GetHashCode()}, ID: {th.ManagedThreadId}");
 
             Thread thread1 = new(ThreadTask);
-            Thread thread2 = new(ThreadTask);
             Thread thread3 = new(ThreadTask);
 
-            thread1.Start("Negr killed");
-            thread2.Start("Norm people alive");
-            thread3.Start("Cat eats");
-
-            for (int i = 0; i < 50; i++)
+            using (CancellationTokenSource tokenSource = new())
             {
-                Console.WriteLine(i);
-                if (i >= 25) thread3.Join();
-                Thread.Sleep(20);
+                CancellationToken token = tokenSource.Token;
+                thread1.Start("Negr killed");
+                ParameterizedThreadStart cancelThread = new((o) => ThreadReadKey(tokenSource));
+                Thread thread2 = new(cancelThread);
+                thread2.Start();
+                thread3.Start(token);
+
+                for (int i = 0; i < 50; i++)
+                {
+                    Console.WriteLine(i);
+                    if (i >= 25) thread3.Join();
+                    Thread.Sleep(50);
+                }
+
+                tokenSource.Cancel();
             }
-            ThreadTask("Nothing!");
+
             Console.WriteLine(thCount);
         }
     }
